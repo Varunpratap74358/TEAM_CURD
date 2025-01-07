@@ -32,7 +32,7 @@ export const getall=async(req,res)=>{
     try {
         
         const getdata=await crudModel.find()
-        return res.status(200).json(getdata)
+        return res.status(200).json({getdata})
     } catch (error) {
         return res.status(500).json({ msg: "Internal Error", error: error.message });
     }

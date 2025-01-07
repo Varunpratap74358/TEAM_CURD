@@ -1,6 +1,7 @@
+import axios from "axios";
 import React, { useState } from "react";
 
-const InformationPage = () => {
+const InformationPage = ({information}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -14,11 +15,14 @@ const InformationPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (formData) => {
     try {
       // Call your update API here
-      console.log("Updated Data:", formData);
-      alert("Information updated successfully!");
+      // console.log("Updated Data:", formData);
+      const {data} = await axios.put(`http://localhost:4000/api/update/${formData._id}`,formData)
+      alert(data.msg)
+      // alert("Information updated successfully!");
+
       setIsModalOpen(false); // Close modal after updating
     } catch (error) {
       console.log(error);
@@ -33,24 +37,18 @@ const InformationPage = () => {
 
   const deleteData = async (id: number) => {
     try {
-      alert(`Delete ID: ${id}`);
+      // alert(`Delete ID: ${id}`);
+      const {data} = await axios.delete(`http://localhost:4000/api/delete/${id}`)
+      alert(data.msg)
     } catch (error) {
       console.log(error);
     }
   };
 
-  const Information = [
-    { name: "Varun", email: "v@gmail.com", phone: "86016869", address: "SPN" },
-    { name: "Aman", email: "a@gmail.com", phone: "86016870", address: "Lucknow" },
-    { name: "Rohan", email: "r@gmail.com", phone: "86016871", address: "Delhi" },
-    { name: "Sohan", email: "s@gmail.com", phone: "86016872", address: "Noida" },
-    { name: "Mohan", email: "m@gmail.com", phone: "86016873", address: "Kanpur" },
-  ];
-
   return (
     <div className="flex justify-center pt-10 flex-col gap-9 items-center">
       {/* Data List */}
-      {Information.map((info, i) => {
+      {information.map((info,i) => {
         return (
           <div
             key={i}
@@ -76,7 +74,7 @@ const InformationPage = () => {
             </div>
             <div className="flex flex-col items-center justify-center gap-2">
               <button
-                onClick={() => deleteData(i)}
+                onClick={() => deleteData(info._id)}
                 className="border py-1 px-4 w-[200px] hover:bg-red-600 rounded transition-all duration-200"
               >
                 DELETE
@@ -100,7 +98,7 @@ const InformationPage = () => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleUpdate();
+                handleUpdate(formData);
               }}
               className="space-y-4"
             >

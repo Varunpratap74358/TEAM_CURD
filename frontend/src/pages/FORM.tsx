@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react"
 
 
@@ -7,10 +8,13 @@ const FORM = () => {
     const [phone, setPhone] = useState<number>();
     const [address, setAddress] = useState<string>('');
 
-    const handelSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            console.log(name, email, phone, address)
+            // console.log(name, email, phone, address)
+            const { data } = await axios.post('http://localhost:4000/api/create', { name, email, phone, address })
+            alert(data.msg)
+            console.log(data)
         } catch (error) {
             console.log(error)
             alert("Somthin went wrong to submit form")
